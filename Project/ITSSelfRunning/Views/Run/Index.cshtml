@@ -1,0 +1,201 @@
+﻿@model IEnumerable<Lib.Activity>
+
+@{
+    ViewData["Title"] = "Index";
+
+}
+
+
+<style>
+    body {
+        margin-top: 10vh;
+    }
+
+    .trainings {
+        padding-top: 10vh;
+    }
+
+    .races {
+        padding-top: 10vh;
+    }
+</style>
+
+
+
+
+<div class="row">
+    <div class="col-lg-2">
+        <a asp-controller="Run" asp-action="CreateTraining" class="btn btn-primary" id="createTraining">
+            Create new Training
+        </a>
+    </div>
+    <div class="col-lg-2">
+        <a asp-controller="Run" asp-action="GetRaceList" class="btn btn-primary" id="joinRaces">Join a race</a>
+    </div>
+</div>
+<br />
+<table class="table" id="trainingTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<table class="table" id="raceTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UriGara)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!--
+<button id="previous" onclick="previousPage()"><<</button>
+<p id="currentPage"></p>
+<button id="next" onclick="nextPage()">>></button>-->
+
+
+
+
+<script>
+    var pageNumRace = 1;
+    var itemsPerPageRace = 10;
+    var counterRace = 0;
+    var pageNumTraining = 1;
+    var itemsPerPageTraining = 10;
+    var counterTraining = 0;
+    var tableRace = document.getElementById("raceTable");
+    var tableTraining = document.getElementById("trainingTable");
+    compileTables();
+
+    function compileTables() {
+
+
+
+        @foreach (var item in Model)
+    {
+        if (item.Type == 1)
+        {
+
+            <text>
+                counterTraining++;
+                if (counterTraining > itemsPerPageTraining * (pageNumTraining - 1) &&
+                    counterTraining <= itemsPerPageTraining * pageNumTraining) {
+                    var row = tableTraining.insertRow(1);
+
+                    var nameRow = row.insertCell(0);
+                    nameRow.innerHTML = "@item.Name";
+
+                    var creationDate = row.insertCell(1);
+                    creationDate.innerHTML = "@item.CreationDate";
+
+                    var place = row.insertCell(2);
+                    place.innerHTML = "@item.Place";
+
+                    var rowStatus = row.insertCell(3);
+                    var button = row.insertCell(4);
+                    if (@item.Status === 0) {
+                        rowStatus.innerHTML = '<img src="images/start.png" width="40" height="40"/>';
+                        button.innerHTML =
+                            '@Html.ActionLink("Start", "StartTraining", item, new {@class = "btn btn-primary btnGriglia"})';
+                    } else if (@item.Status === 1) {
+                        rowStatus.innerHTML = '<img src="images/open.png" width="40" height="40"/>';
+                        button.innerHTML =
+                            '@Html.ActionLink("View", "RunTraining", new {activityId = item.Id, isToOpen = false, activityType = item.Type}, new {@class = "btn btn-primary btnGriglia"})';
+                    } else if (@item.Status === 2) {
+                        rowStatus.innerHTML = '<img src="images/closed.png" width="40" height="40"/>';
+                        button.innerHTML =
+                            '@Html.ActionLink("Show data", "ViewTrainingData", item, new {@class = "btn btn-primary btnGriglia"})';
+                    }
+                }
+            </text>
+        }
+        else if (item.Type == 2)
+        {
+
+
+
+            <text>
+                    counterRace++;
+                    if (counterRace > itemsPerPageRace * (pageNumRace - 1) &&
+                        counterRace <= itemsPerPageRace * pageNumRace) {
+                        var row = tableRace.insertRow(1);
+
+
+                        var nameRow = row.insertCell(0);
+                        nameRow.innerHTML = "@item.Name";
+
+                        var creationDate = row.insertCell(1);
+                        creationDate.innerHTML = "@item.CreationDate";
+
+                        var place = row.insertCell(2);
+                        place.innerHTML = "@item.Place";
+
+                        var rowStatus = row.insertCell(3);
+
+
+                        var uriRace = row.insertCell(4);
+                        uriRace.innerHTML = "@item.UriGara";
+                        var button = row.insertCell(5);
+                        if (@item.Status === 0) {
+                            rowStatus.innerHTML = '<img src="images/start.png" width="40" height="40"/>';
+                            button.innerHTML =
+                                '@Html.ActionLink("Start", "StartTraining", item, new {@class = "btn btn-primary btnGriglia"})';
+                        } else if (@item.Status === 1) {
+                            rowStatus.innerHTML = '<img src="images/open.png" width="40" height="40"/>';
+                            button.innerHTML =
+                                '@Html.ActionLink("View", "RunTraining", new {activityId = item.Id, isToOpen = false, activityType = item.Type, uriGara = item.UriGara}, new {@class = "btn btn-primary btnGriglia"})';
+                        } else if (@item.Status === 2) {
+                            rowStatus.innerHTML = '<img src="images/closed.png" width="40" height="40"/>';
+                            button.innerHTML =
+                                '@Html.ActionLink("Show data", "ViewTrainingData", item, new {@class = "btn btn-primary btnGriglia"})';
+                        }
+                    }
+                </text>
+
+    }
+    }
+    }
+
+
+
+    /*
+    function previousPage() {
+        $("#trainingTable tbody .tableTrainingRows").remove();
+       // pageNumRace = pageNumRace + 1;
+        pageNumTraining = pageNumTraining + 1;
+        //compileTables();
+    }*/
+</script>

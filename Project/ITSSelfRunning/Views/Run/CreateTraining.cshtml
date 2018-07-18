@@ -1,0 +1,46 @@
+﻿@model ITSSelfRunning.Models.RunViewModels.ActivityViewModel
+
+@{
+    ViewData["Title"] = "CreateTraining";
+}
+
+<h2>CreateTraining</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-action="CreateTraining">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Place" class="control-label"></label>
+                <input asp-for="Place" id="place" class="form-control" />
+                <span asp-validation-for="Place" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh4cgxhziWIt6rEa5XFffeOmEBmMIEesA" async defer></script>
+<script src="~/js/location.js"></script>
+
+
+<script type="text/javascript">
+    var place = document.getElementById("place");
+
+    getPlace(function(address) {
+        place.value = address;
+    });
+</script>

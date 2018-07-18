@@ -1,0 +1,104 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    font-family: 'Didact Gothic', sans-serif;
+    font-size: 17px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    line-height: 1.4;
+    padding-bottom: 40vh;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 50px;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+
+
+.navbar {
+    background-color: #0a2239;
+}
+
+
+.navbar-inverse .navbar-brand {
+    color: white;
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+
+
+.navbar-inverse .btn-link {
+    color:white;
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+
+.navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus {
+    color: #1d84b5;
+    background-color: transparent;
+}
+
+
+
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #1d84b5;
+    background-color: transparent;
+}
+
+
+.navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
+    color: #1d84b5;
+}
+
+.img-responsive {
+    width: 100%;
+}
+.carousel-inner{
+    width:100%;
+    max-height: 94vh !important;
+}
+
+
+.btnGriglia {
+    min-width: 90px;
+}
+
+
+.profilePic {
+    width: 50px;
+    height: 50px;
+    margin-right: 3px;
+}
+
+

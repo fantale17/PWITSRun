@@ -1,0 +1,25 @@
+﻿@model Lib.Activity
+
+
+@{
+    ViewData["Title"] = "StartTraining";
+}
+
+<h2>StartTraining</h2>
+
+<div>
+    <div class="row">
+        <h4>Name: @Model.Name</h4>
+    </div>
+    <div class="row">
+        <h4>Place: @Model.Place</h4>
+    </div>
+</div>
+
+
+
+<div class="row">
+    @Html.ActionLink("Run Training", "RunTraining", new { activityId = Model.Id, isToOpen = true, activityType = Model.Type, uriGara = Model.UriGara}, new { @class = "btn btn-primary btn-large" })
+</div>
+
+

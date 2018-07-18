@@ -1,0 +1,209 @@
+﻿@model ITSSelfRunning.Models.Run.ActivityRunner
+
+@{
+    ViewData["Title"] = "RunTraining";
+}
+
+<style>
+    #map {
+        height: 400px; /* The height is 400 pixels */
+        width: 100%; /* The width is the width of the web page */
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    .modal-content {
+        background-color: #ffffff;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%; /* Could be more or less, depending on screen size */
+    }
+    .close {
+        color: #000000;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
+
+    .modalButtonBar {
+        padding-top: 3vh;
+        padding-left: 3vh;
+    }
+
+
+    .modal-content {
+        padding-left: 3vh;
+    }
+
+
+    #my_camera {
+        float: left;
+    }
+
+    #results {
+        float: right;
+    }
+
+
+</style>
+
+<body>
+<div id="modale" class="modal">
+    <div class="modal-content">
+        <div class="row"><span class="close">&times;</span></div>
+        
+
+        <div class="row">
+            <div id="my_camera"></div>
+            <div id="results"></div>
+        </div>
+
+        <form>
+            <div class="row modalButtonBar">
+                <input type=button value="Take Selfie" onClick="take_snapshot()" class="btn btn-primary">
+                <input type=button value="Upload Selfie" onClick="uploadSelfie()" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<h2>RunTraining</h2>
+<button class = "btn btn-primary" id="openModal">Take a selfie</button>
+@Html.ActionLink("End", "EndTraining", new { activityId = @Model.IdActivity }, new { @class = "btn btn-primary" })
+
+
+<div id="map"></div>
+<div id="data"></div>
+    
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh4cgxhziWIt6rEa5XFffeOmEBmMIEesA"></script>
+<script src="~/js/location.js"></script>
+<script src="~/js/webcam.min.js"></script>
+
+
+<script type="text/javascript">
+    var data = document.getElementById("data");
+
+    getLocation(@Model.IdActivity, @Model.IdRunner, @Model.Type, "@Model.UriGara");
+
+    function take_snapshot() {
+        Webcam.snap(function(data_uri) {
+            document.getElementById('results').innerHTML =
+                '<img id="selfie" src="' + data_uri + '"/>';
+        });
+    }
+
+
+    function uploadSelfie() {
+        var photo = document.getElementById("selfie").src;
+        var data = JSON.stringify({
+            "photo": photo,
+            "time": new Date().toISOString(),
+            "idActivity" : @Model.IdActivity
+        });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(createSelfieMarker, showError);
+          
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/Run/UploadSelfie",
+            data: data,
+            dataType: "json",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+
+
+    function createSelfieMarker(position) {
+
+
+        var marker = new google.maps.Marker({
+            position: { lat: position.coords.latitude, lng: position.coords.longitude },
+            map: map,
+            icon: {
+                size: new google.maps.Size(220,220),
+                scaledSize: new google.maps.Size(60,50),
+                origin: new google.maps.Point(0,0),
+                url: document.getElementById("selfie").src,
+                anchor: new google.maps.Point(16,16)}
+        });
+    }
+
+
+    var modal = document.getElementById('modale');
+    var openModal = document.getElementById("openModal");
+    var close = document.getElementsByClassName("close")[0];
+
+    openModal.onclick = function() {
+        modal.style.display = "block";
+        Webcam.set({
+            width: 320,
+            height: 240,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        Webcam.attach('#my_camera');
+    }
+
+    close.onclick = function() {
+        modal.style.display = "none";
+        Webcam.reset();
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+
+    
+
+    function showError(error) {
+        if (error.code === 1) {
+            data.innerHTML = "User denied the request for Geolocation.";
+        }
+        else if (err.code === 2) {
+            data.innerHTML = "Location information is unavailable.";
+        }
+        else if (err.code === 3) {
+            data.innerHTML = "The request to get user location timed out.";
+        }
+        else {
+            data.innerHTML = "An unknown error occurred.";
+        }
+    }
+</script>
+
+</body>
